@@ -1,0 +1,3006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ganggaan OS — Atelier North</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root{
+    --bg:#f7f7f5;
+    --surface:#ffffff;
+    --surface2:#f1f1ee;
+    --ink:#171715;
+    --muted:#777873;
+    --line:#e5e5df;
+    --accent:#b88a52;
+    --accent2:#d7b17b;
+    --green:#3d8064;
+    --red:#b45d55;
+    --blue:#55759b;
+    --shadow:0 18px 50px rgba(20,20,15,.07);
+    --radius:20px;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:"DM Sans",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    overflow-x:hidden;
+}
+
+button,
+input{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    width:250px;
+    background:#fff;
+    border-right:1px solid var(--line);
+    padding:26px 16px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    z-index:100;
+    display:flex;
+    flex-direction:column;
+}
+
+.brand{
+    padding:4px 12px 30px;
+}
+
+.brand-name{
+    font-family:"Playfair Display",serif;
+    font-size:23px;
+    letter-spacing:.5px;
+}
+
+.brand-sub{
+    font-size:10px;
+    color:#999;
+    letter-spacing:2px;
+    margin-top:5px;
+    text-transform:uppercase;
+}
+
+.workspace{
+    background:#f5f3ee;
+    border-radius:13px;
+    padding:12px;
+    margin-bottom:22px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.workspace-logo{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    background:#1c1c1a;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:serif;
+}
+
+.workspace small{
+    color:#888;
+    font-size:10px;
+}
+
+.workspace strong{
+    display:block;
+    font-size:13px;
+    margin-top:2px;
+}
+
+.nav-label{
+    font-size:10px;
+    color:#aaa;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    padding:0 12px;
+    margin:8px 0;
+}
+
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+}
+
+.nav button{
+    border:0;
+    background:transparent;
+    padding:12px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:#777;
+    text-align:left;
+    font-size:13px;
+    transition:.2s;
+}
+
+.nav button:hover{
+    background:#f4f3ef;
+    color:#111;
+    transform:translateX(2px);
+}
+
+.nav button.active{
+    background:#1b1b19;
+    color:#fff;
+}
+
+.nav-icon{
+    width:19px;
+    text-align:center;
+    font-size:16px;
+}
+
+.nav-badge{
+    margin-left:auto;
+    background:#e7d4b7;
+    color:#76572f;
+    font-size:10px;
+    border-radius:20px;
+    padding:3px 7px;
+}
+
+.sidebar-bottom{
+    margin-top:auto;
+}
+
+.ai-sidebar{
+    background:linear-gradient(145deg,#20201d,#37362f);
+    color:white;
+    border-radius:17px;
+    padding:17px;
+    margin-bottom:15px;
+    border:1px solid #44443e;
+}
+
+.ai-sidebar .spark{
+    color:#dfb77d;
+    font-size:20px;
+}
+
+.ai-sidebar h4{
+    margin:7px 0 5px;
+}
+
+.ai-sidebar p{
+    color:#bbb;
+    font-size:11px;
+    line-height:1.5;
+}
+
+.ai-open{
+    border:0;
+    background:#e5c28f;
+    color:#272017;
+    padding:8px 11px;
+    border-radius:9px;
+    margin-top:12px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.user{
+    border-top:1px solid var(--line);
+    padding:15px 7px 0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    background:#d7c7af;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:700;
+    font-size:12px;
+}
+
+.user small{
+    color:#999;
+    font-size:10px;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+    margin-left:250px;
+    width:calc(100% - 250px);
+    min-height:100vh;
+}
+
+.topbar{
+    height:76px;
+    border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.88);
+    backdrop-filter:blur(18px);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 35px;
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+
+.breadcrumb{
+    font-size:12px;
+    color:#999;
+}
+
+.breadcrumb strong{
+    color:#222;
+}
+
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.search{
+    width:220px;
+    background:#f5f5f2;
+    border:1px solid var(--line);
+    padding:10px 13px;
+    border-radius:11px;
+    outline:0;
+    font-size:12px;
+}
+
+.icon-btn{
+    border:1px solid var(--line);
+    background:#fff;
+    width:39px;
+    height:39px;
+    border-radius:11px;
+    font-size:16px;
+    position:relative;
+}
+
+.dot{
+    position:absolute;
+    width:7px;
+    height:7px;
+    background:#c46a5f;
+    border-radius:50%;
+    top:8px;
+    right:8px;
+}
+
+.page{
+    display:none;
+    padding:35px;
+    animation:pageIn .3s ease;
+}
+
+.page.active{
+    display:block;
+}
+
+@keyframes pageIn{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:28px;
+}
+
+.eyebrow{
+    font-size:10px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:#a58a65;
+    margin-bottom:8px;
+}
+
+h1{
+    font-family:"Playfair Display",serif;
+    font-size:36px;
+    font-weight:600;
+    letter-spacing:-1px;
+}
+
+.subtitle{
+    color:#8a8b85;
+    font-size:13px;
+    margin-top:6px;
+}
+
+.primary{
+    border:0;
+    background:#1b1b19;
+    color:white;
+    padding:12px 17px;
+    border-radius:11px;
+    font-size:12px;
+    font-weight:600;
+    transition:.2s;
+}
+
+.primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,.14);
+}
+
+.secondary{
+    border:1px solid var(--line);
+    background:white;
+    color:#333;
+    padding:11px 15px;
+    border-radius:11px;
+    font-size:12px;
+}
+
+/* ================= DASHBOARD ================= */
+
+.hero{
+    background:
+        radial-gradient(circle at 85% 20%,rgba(209,174,126,.28),transparent 30%),
+        linear-gradient(120deg,#fff,#f4f1e9);
+    border:1px solid var(--line);
+    border-radius:25px;
+    padding:30px;
+    min-height:235px;
+    position:relative;
+    overflow:hidden;
+    margin-bottom:22px;
+}
+
+.hero-grid{
+    display:grid;
+    grid-template-columns:1.25fr .75fr;
+    gap:30px;
+}
+
+.hero h2{
+    font-family:"Playfair Display",serif;
+    font-size:34px;
+    max-width:590px;
+    line-height:1.12;
+}
+
+.hero p{
+    color:#777;
+    font-size:13px;
+    max-width:520px;
+    line-height:1.7;
+    margin-top:13px;
+}
+
+.hero-stats{
+    display:flex;
+    gap:30px;
+    margin-top:22px;
+}
+
+.hero-stat strong{
+    font-size:22px;
+}
+
+.hero-stat span{
+    display:block;
+    color:#999;
+    font-size:10px;
+    margin-top:2px;
+}
+
+.ai-insight{
+    background:#1c1c19;
+    color:white;
+    border-radius:18px;
+    padding:20px;
+    align-self:stretch;
+}
+
+.ai-insight .ai-title{
+    display:flex;
+    justify-content:space-between;
+    color:#dfbd88;
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+
+.ai-insight h3{
+    font-family:"Playfair Display",serif;
+    font-size:21px;
+    margin:18px 0 9px;
+}
+
+.ai-insight p{
+    color:#bbb;
+    margin:0;
+    font-size:11px;
+    line-height:1.6;
+}
+
+.insight-action{
+    margin-top:15px;
+    background:#e0bb82;
+    border:0;
+    padding:9px 12px;
+    border-radius:9px;
+    font-size:10px;
+}
+
+/* ================= CARDS ================= */
+
+.metrics{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-bottom:22px;
+}
+
+.metric{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:17px;
+    padding:19px;
+}
+
+.metric-top{
+    display:flex;
+    justify-content:space-between;
+    color:#999;
+    font-size:11px;
+}
+
+.metric-icon{
+    width:30px;
+    height:30px;
+    border-radius:9px;
+    background:#f5f1e9;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.metric strong{
+    font-size:27px;
+    display:block;
+    margin:13px 0 3px;
+}
+
+.metric-change{
+    font-size:10px;
+    color:var(--green);
+}
+
+.metric-change.red{
+    color:var(--red);
+}
+
+/* ================= GRID ================= */
+
+.two-grid{
+    display:grid;
+    grid-template-columns:1.35fr .65fr;
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:19px;
+    padding:20px;
+}
+
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:17px;
+}
+
+.card-title{
+    font-size:14px;
+    font-weight:700;
+}
+
+.card-link{
+    border:0;
+    background:none;
+    color:#a17b4e;
+    font-size:11px;
+}
+
+/* ================= PROJECTS ================= */
+
+.project-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.project-row{
+    display:grid;
+    grid-template-columns:2fr 1fr 110px 90px;
+    align-items:center;
+    padding:13px;
+    border:1px solid #ededE8;
+    border-radius:13px;
+    transition:.2s;
+}
+
+.project-row:hover{
+    background:#fafaf8;
+    transform:translateY(-1px);
+}
+
+.project-name{
+    font-size:12px;
+    font-weight:700;
+}
+
+.project-meta{
+    color:#999;
+    font-size:10px;
+    margin-top:3px;
+}
+
+.progress{
+    height:5px;
+    background:#ededeb;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress span{
+    display:block;
+    height:100%;
+    background:#a9875d;
+    border-radius:20px;
+}
+
+.progress-text{
+    font-size:9px;
+    color:#999;
+    margin-top:4px;
+}
+
+.status{
+    display:inline-flex;
+    align-items:center;
+    width:max-content;
+    padding:5px 8px;
+    border-radius:20px;
+    font-size:9px;
+}
+
+.status.green{
+    background:#e9f2ed;
+    color:#3c755d;
+}
+
+.status.gold{
+    background:#f5eddf;
+    color:#9a7747;
+}
+
+.status.red{
+    background:#f8e9e7;
+    color:#a95d54;
+}
+
+/* ================= ACTIVITY ================= */
+
+.activity{
+    display:flex;
+    flex-direction:column;
+}
+
+.activity-item{
+    display:flex;
+    gap:12px;
+    padding:13px 0;
+    border-bottom:1px solid #efefeb;
+}
+
+.activity-item:last-child{
+    border-bottom:0;
+}
+
+.activity-dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#b99568;
+    margin-top:5px;
+}
+
+.activity-text{
+    font-size:11px;
+    line-height:1.5;
+}
+
+.activity-text span{
+    color:#999;
+    display:block;
+    font-size:9px;
+    margin-top:2px;
+}
+
+/* ================= TABLES ================= */
+
+.table-card{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:19px;
+    overflow:hidden;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    text-align:left;
+    font-size:9px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#999;
+    padding:14px 18px;
+    background:#fafaf8;
+    font-weight:600;
+}
+
+td{
+    padding:15px 18px;
+    border-top:1px solid #efefeb;
+    font-size:11px;
+}
+
+td strong{
+    font-size:12px;
+}
+
+.action-btn{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:8px;
+    padding:7px 10px;
+    font-size:10px;
+}
+
+.action-btn:hover{
+    background:#f4f1e9;
+}
+
+/* ================= PROJECT CARDS ================= */
+
+.project-cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:17px;
+}
+
+.project-card{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:19px;
+    overflow:hidden;
+    transition:.25s;
+}
+
+.project-card:hover{
+    transform:translateY(-4px);
+    box-shadow:var(--shadow);
+}
+
+.project-image{
+    height:145px;
+    position:relative;
+    overflow:hidden;
+}
+
+.project-image.one{
+    background:linear-gradient(135deg,#d9d0c1,#77756c);
+}
+
+.project-image.two{
+    background:linear-gradient(135deg,#c9d0cb,#767b76);
+}
+
+.project-image.three{
+    background:linear-gradient(135deg,#ded3c6,#927c65);
+}
+
+.project-image::before{
+    content:"";
+    position:absolute;
+    inset:20px;
+    border:1px solid rgba(255,255,255,.45);
+}
+
+.project-card-body{
+    padding:16px;
+}
+
+.project-card-body h3{
+    font-family:"Playfair Display",serif;
+    font-size:19px;
+}
+
+.project-card-body p{
+    color:#999;
+    font-size:10px;
+    margin:5px 0 14px;
+}
+
+.project-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* ================= TASKS ================= */
+
+.task{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 0;
+    border-bottom:1px solid #eee;
+}
+
+.task:last-child{
+    border-bottom:0;
+}
+
+.check{
+    width:20px;
+    height:20px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    background:#fff;
+    cursor:pointer;
+}
+
+.check.done{
+    background:#1c1c19;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.task-content{
+    flex:1;
+}
+
+.task-content strong{
+    font-size:11px;
+}
+
+.task-content span{
+    display:block;
+    color:#999;
+    font-size:9px;
+    margin-top:3px;
+}
+
+.task.completed strong{
+    text-decoration:line-through;
+    color:#aaa;
+}
+
+/* ================= APPROVALS ================= */
+
+.approval-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+}
+
+.approval{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:19px;
+}
+
+.approval-head{
+    display:flex;
+    justify-content:space-between;
+}
+
+.approval h3{
+    font-family:"Playfair Display",serif;
+    font-size:19px;
+    margin:12px 0 5px;
+}
+
+.approval p{
+    color:#999;
+    font-size:10px;
+}
+
+.approval-buttons{
+    display:flex;
+    gap:8px;
+    margin-top:18px;
+}
+
+.approve{
+    border:0;
+    background:#1d1d1a;
+    color:white;
+    padding:9px 13px;
+    border-radius:8px;
+    font-size:10px;
+}
+
+.reject{
+    border:1px solid #ddd;
+    background:white;
+    padding:9px 13px;
+    border-radius:8px;
+    font-size:10px;
+}
+
+/* ================= AI ================= */
+
+.ai-page{
+    display:grid;
+    grid-template-columns:1fr 330px;
+    gap:20px;
+}
+
+.ai-chat{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:20px;
+    min-height:570px;
+    display:flex;
+    flex-direction:column;
+}
+
+.chat-header{
+    padding:20px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.ai-avatar{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    background:#1c1c19;
+    color:#e5c38e;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:19px;
+}
+
+.chat-header strong{
+    font-size:13px;
+}
+
+.chat-header span{
+    display:block;
+    color:#999;
+    font-size:9px;
+    margin-top:3px;
+}
+
+.messages{
+    flex:1;
+    padding:24px;
+    display:flex;
+    flex-direction:column;
+    gap:13px;
+}
+
+.message{
+    max-width:72%;
+    padding:12px 14px;
+    border-radius:14px;
+    font-size:11px;
+    line-height:1.6;
+}
+
+.message.ai{
+    background:#f3f2ee;
+    align-self:flex-start;
+}
+
+.message.user{
+    background:#1d1d1a;
+    color:white;
+    align-self:flex-end;
+}
+
+.chat-input{
+    border-top:1px solid var(--line);
+    padding:14px;
+    display:flex;
+    gap:8px;
+}
+
+.chat-input input{
+    flex:1;
+    border:1px solid var(--line);
+    background:#fafaf8;
+    border-radius:10px;
+    padding:11px;
+    outline:0;
+    font-size:11px;
+}
+
+.chat-send{
+    border:0;
+    background:#1c1c19;
+    color:white;
+    width:43px;
+    border-radius:10px;
+}
+
+/* ================= MODAL ================= */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(20,20,18,.45);
+    backdrop-filter:blur(7px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:500;
+    padding:20px;
+}
+
+.modal-overlay.show{
+    display:flex;
+}
+
+.modal{
+    width:min(720px,100%);
+    max-height:88vh;
+    overflow:auto;
+    background:white;
+    border-radius:24px;
+    box-shadow:0 30px 100px rgba(0,0,0,.2);
+    animation:modalIn .25s ease;
+}
+
+@keyframes modalIn{
+    from{
+        opacity:0;
+        transform:translateY(15px) scale(.98);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.modal-top{
+    padding:24px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+}
+
+.modal-top h2{
+    font-family:"Playfair Display",serif;
+    font-size:27px;
+}
+
+.close{
+    width:35px;
+    height:35px;
+    border:0;
+    border-radius:10px;
+    background:#f3f3ef;
+}
+
+.modal-body{
+    padding:24px;
+}
+
+.detail-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.detail{
+    background:#f7f7f4;
+    padding:14px;
+    border-radius:12px;
+}
+
+.detail small{
+    color:#999;
+    display:block;
+    font-size:9px;
+}
+
+.detail strong{
+    font-size:13px;
+    display:block;
+    margin-top:4px;
+}
+
+.timeline{
+    border-left:1px solid #ddd;
+    padding-left:20px;
+}
+
+.timeline-item{
+    position:relative;
+    padding-bottom:18px;
+}
+
+.timeline-item::before{
+    content:"";
+    position:absolute;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#b28b5e;
+    left:-24px;
+    top:4px;
+}
+
+.timeline-item strong{
+    font-size:11px;
+}
+
+.timeline-item p{
+    color:#999;
+    font-size:9px;
+    margin-top:4px;
+}
+
+/* ================= COMMAND ================= */
+
+.command{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.35);
+    backdrop-filter:blur(5px);
+    z-index:600;
+    display:none;
+    justify-content:center;
+    align-items:flex-start;
+    padding-top:130px;
+}
+
+.command.show{
+    display:flex;
+}
+
+.command-box{
+    width:min(560px,90%);
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 30px 100px rgba(0,0,0,.2);
+}
+
+.command-input{
+    width:100%;
+    border:0;
+    outline:0;
+    padding:19px;
+    font-size:14px;
+    border-bottom:1px solid var(--line);
+}
+
+.command-item{
+    padding:13px 18px;
+    font-size:11px;
+    border-bottom:1px solid #eee;
+    cursor:pointer;
+}
+
+.command-item:hover{
+    background:#f5f3ee;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#1d1d1a;
+    color:white;
+    padding:13px 17px;
+    border-radius:12px;
+    font-size:11px;
+    transform:translateY(100px);
+    opacity:0;
+    transition:.3s;
+    z-index:800;
+}
+
+.toast.show{
+    transform:none;
+    opacity:1;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1000px){
+
+    .sidebar{
+        width:75px;
+        padding:20px 10px;
+    }
+
+    .brand-sub,
+    .workspace div:not(.workspace-logo),
+    .nav-label,
+    .nav button span:not(.nav-icon),
+    .ai-sidebar,
+    .user div{
+        display:none;
+    }
+
+    .brand-name{
+        font-size:0;
+        text-align:center;
+    }
+
+    .brand-name::after{
+        content:"AN";
+        font-size:17px;
+    }
+
+    .nav button{
+        justify-content:center;
+    }
+
+    .nav-badge{
+        position:absolute;
+        margin-left:28px;
+        margin-top:-20px;
+    }
+
+    .main{
+        margin-left:75px;
+        width:calc(100% - 75px);
+    }
+
+    .hero-grid,
+    .two-grid,
+    .ai-page{
+        grid-template-columns:1fr;
+    }
+
+    .metrics{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .project-cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:650px){
+
+    .topbar{
+        padding:0 15px;
+    }
+
+    .search{
+        display:none;
+    }
+
+    .page{
+        padding:20px 15px;
+    }
+
+    h1{
+        font-size:29px;
+    }
+
+    .page-header{
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .metrics{
+        grid-template-columns:1fr;
+    }
+
+    .project-cards,
+    .approval-grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero-grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero h2{
+        font-size:27px;
+    }
+
+    .project-row{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .detail-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-name">GANGGAAN</div>
+        <div class="brand-sub">Operating System</div>
+    </div>
+
+    <div class="workspace">
+        <div class="workspace-logo">G</div>
+        <div>
+            <small>WORKSPACE</small>
+            <strong>Ganggaan Studio</strong>
+        </div>
+    </div>
+
+    <div class="nav-label">Workspace</div>
+
+    <nav class="nav">
+
+        <button class="active" data-page="dashboard">
+            <span class="nav-icon">⌂</span>
+            <span>Overview</span>
+        </button>
+
+        <button data-page="projects">
+            <span class="nav-icon">▣</span>
+            <span>Projects</span>
+        </button>
+
+        <button data-page="clients">
+            <span class="nav-icon">♙</span>
+            <span>Clients</span>
+        </button>
+
+        <button data-page="approvals">
+            <span class="nav-icon">✓</span>
+            <span>Approvals</span>
+            <span class="nav-badge">4</span>
+        </button>
+
+        <button data-page="tasks">
+            <span class="nav-icon">☷</span>
+            <span>Tasks</span>
+        </button>
+
+        <button data-page="documents">
+            <span class="nav-icon">▤</span>
+            <span>Documents</span>
+        </button>
+
+        <button data-page="reports">
+            <span class="nav-icon">◒</span>
+            <span>Reports</span>
+        </button>
+
+    </nav>
+
+    <div class="nav-label" style="margin-top:22px;">Intelligence</div>
+
+    <nav class="nav">
+
+        <button data-page="ai">
+            <span class="nav-icon">✦</span>
+            <span>North AI</span>
+        </button>
+
+        <button data-page="settings">
+            <span class="nav-icon">⚙</span>
+            <span>Settings</span>
+        </button>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <div class="ai-sidebar">
+            <div class="spark">✦</div>
+            <h4>North AI</h4>
+            <p>
+                3 operational issues detected
+                across your active projects.
+            </p>
+            <button class="ai-open" onclick="navigate('ai')">
+                Review insights →
+            </button>
+        </div>
+
+        <div class="user">
+            <div class="avatar">GA</div>
+            <div>
+                <strong style="font-size:11px;">Ganggaan Admin</strong>
+                <small>Studio workspace</small>
+            </div>
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+<header class="topbar">
+
+    <div class="breadcrumb">
+        Ganggaan / <strong id="breadcrumb">Overview</strong>
+    </div>
+
+    <div class="top-actions">
+
+        <input
+            class="search"
+            id="globalSearch"
+            placeholder="Search projects, clients..."
+        >
+
+        <button class="icon-btn" onclick="openCommand()">⌘</button>
+
+        <button class="icon-btn" onclick="showToast('You have 4 pending approvals.')">
+            ♢
+            <span class="dot"></span>
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section class="page active" id="dashboard">
+
+    <div class="page-header">
+
+        <div>
+            <div class="eyebrow">Monday · Studio intelligence</div>
+            <h1>Good morning, Ganggaan.</h1>
+            <p class="subtitle">
+                Your business, projects and people — connected.
+            </p>
+        </div>
+
+        <button class="primary" onclick="navigate('projects')">
+            + New Project
+        </button>
+
+    </div>
+
+
+    <div class="hero">
+
+        <div class="hero-grid">
+
+            <div>
+
+                <div class="eyebrow">Studio operating picture</div>
+
+                <h2>
+                    Your projects are moving.
+                    Here's what needs your attention.
+                </h2>
+
+                <p>
+                    Ganggaan OS connects client communication,
+                    project execution, approvals, documents and
+                    financial visibility into one operating layer.
+                </p>
+
+                <div class="hero-stats">
+
+                    <div class="hero-stat">
+                        <strong>12</strong>
+                        <span>Active projects</span>
+                    </div>
+
+                    <div class="hero-stat">
+                        <strong>₹8.4Cr</strong>
+                        <span>Pipeline value</span>
+                    </div>
+
+                    <div class="hero-stat">
+                        <strong>91%</strong>
+                        <span>On schedule</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="ai-insight">
+
+                <div class="ai-title">
+                    <span>✦ North AI</span>
+                    <span>LIVE</span>
+                </div>
+
+                <h3>
+                    3 things need your attention.
+                </h3>
+
+                <p>
+                    Palm Residence has a client approval
+                    waiting for 2 days. Villa 07 is trending
+                    8% above material budget. Four tasks are
+                    approaching their deadline.
+                </p>
+
+                <button
+                    class="insight-action"
+                    onclick="navigate('ai')"
+                >
+                    Review with North AI →
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="metrics">
+
+        <div class="metric">
+            <div class="metric-top">
+                <span>ACTIVE PROJECTS</span>
+                <div class="metric-icon">▣</div>
+            </div>
+            <strong>12</strong>
+            <span class="metric-change">↑ 2 this month</span>
+        </div>
+
+        <div class="metric">
+            <div class="metric-top">
+                <span>PENDING APPROVALS</span>
+                <div class="metric-icon">✓</div>
+            </div>
+            <strong>4</strong>
+            <span class="metric-change red">2 overdue</span>
+        </div>
+
+        <div class="metric">
+            <div class="metric-top">
+                <span>OUTSTANDING</span>
+                <div class="metric-icon">₹</div>
+            </div>
+            <strong>₹42L</strong>
+            <span class="metric-change">↓ 6% this month</span>
+        </div>
+
+        <div class="metric">
+            <div class="metric-top">
+                <span>TEAM CAPACITY</span>
+                <div class="metric-icon">♙</div>
+            </div>
+            <strong>78%</strong>
+            <span class="metric-change">Healthy workload</span>
+        </div>
+
+    </div>
+
+
+    <div class="two-grid">
+
+        <div class="card">
+
+            <div class="card-header">
+                <div class="card-title">Projects requiring attention</div>
+                <button class="card-link" onclick="navigate('projects')">
+                    View all →
+                </button>
+            </div>
+
+            <div class="project-list">
+
+                <div class="project-row"
+                     onclick="openProject('Palm Residence')">
+
+                    <div>
+                        <div class="project-name">Palm Residence</div>
+                        <div class="project-meta">
+                            Luxury Residential · Chennai
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="progress">
+                            <span style="width:72%"></span>
+                        </div>
+                        <div class="progress-text">72% complete</div>
+                    </div>
+
+                    <span class="status gold">Awaiting approval</span>
+
+                    <button class="action-btn"
+                            onclick="event.stopPropagation();openProject('Palm Residence')">
+                        Open
+                    </button>
+
+                </div>
+
+
+                <div class="project-row"
+                     onclick="openProject('Villa 07')">
+
+                    <div>
+                        <div class="project-name">Villa 07</div>
+                        <div class="project-meta">
+                            Architecture + Interiors · ECR
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="progress">
+                            <span style="width:48%"></span>
+                        </div>
+                        <div class="progress-text">48% complete</div>
+                    </div>
+
+                    <span class="status red">Budget alert</span>
+
+                    <button class="action-btn"
+                            onclick="event.stopPropagation();openProject('Villa 07')">
+                        Open
+                    </button>
+
+                </div>
+
+
+                <div class="project-row"
+                     onclick="openProject('Aster House')">
+
+                    <div>
+                        <div class="project-name">Aster House</div>
+                        <div class="project-meta">
+                            Interior Design · Anna Nagar
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="progress">
+                            <span style="width:86%"></span>
+                        </div>
+                        <div class="progress-text">86% complete</div>
+                    </div>
+
+                    <span class="status green">On track</span>
+
+                    <button class="action-btn"
+                            onclick="event.stopPropagation();openProject('Aster House')">
+                        Open
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-header">
+                <div class="card-title">Recent activity</div>
+                <button class="card-link">Live</button>
+            </div>
+
+            <div class="activity">
+
+                <div class="activity-item">
+                    <div class="activity-dot"></div>
+                    <div class="activity-text">
+                        Client approved marble selection.
+                        <span>Palm Residence · 12 min ago</span>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-dot"></div>
+                    <div class="activity-text">
+                        New drawing uploaded by Ar. Kiran.
+                        <span>Villa 07 · 48 min ago</span>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-dot"></div>
+                    <div class="activity-text">
+                        Payment milestone marked complete.
+                        <span>Aster House · 2 hrs ago</span>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-dot"></div>
+                    <div class="activity-text">
+                        Site meeting scheduled.
+                        <span>Lakeview Residence · 4 hrs ago</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PROJECTS ================= -->
+
+<section class="page" id="projects">
+
+    <div class="page-header">
+
+        <div>
+            <div class="eyebrow">Project intelligence</div>
+            <h1>Projects</h1>
+            <p class="subtitle">
+                Every project. One operating view.
+            </p>
+        </div>
+
+        <button class="primary" onclick="showToast('New project workflow opened.')">
+            + New Project
+        </button>
+
+    </div>
+
+
+    <div class="project-cards">
+
+        <div class="project-card">
+
+            <div class="project-image one"></div>
+
+            <div class="project-card-body">
+
+                <h3>Palm Residence</h3>
+
+                <p>
+                    Luxury Residential · Chennai
+                </p>
+
+                <div class="project-bottom">
+
+                    <span class="status gold">
+                        Awaiting approval
+                    </span>
+
+                    <button
+                        class="action-btn"
+                        onclick="openProject('Palm Residence')">
+                        View
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="project-card">
+
+            <div class="project-image two"></div>
+
+            <div class="project-card-body">
+
+                <h3>Villa 07</h3>
+
+                <p>
+                    Architecture + Interiors · ECR
+                </p>
+
+                <div class="project-bottom">
+
+                    <span class="status red">
+                        Budget alert
+                    </span>
+
+                    <button
+                        class="action-btn"
+                        onclick="openProject('Villa 07')">
+                        View
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="project-card">
+
+            <div class="project-image three"></div>
+
+            <div class="project-card-body">
+
+                <h3>Aster House</h3>
+
+                <p>
+                    Interior Design · Anna Nagar
+                </p>
+
+                <div class="project-bottom">
+
+                    <span class="status green">
+                        On track
+                    </span>
+
+                    <button
+                        class="action-btn"
+                        onclick="openProject('Aster House')">
+                        View
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CLIENTS ================= -->
+
+<section class="page" id="clients">
+
+    <div class="page-header">
+
+        <div>
+            <div class="eyebrow">Relationships</div>
+            <h1>Clients</h1>
+            <p class="subtitle">
+                Every relationship, every conversation, connected.
+            </p>
+        </div>
+
+        <button class="primary"
+                onclick="showToast('Client creation workflow opened.')">
+            + Add Client
+        </button>
+
+    </div>
+
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Project</th>
+                    <th>Value</th>
+                    <th>Last activity</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td><strong>Arjun Mehta</strong></td>
+                    <td>Palm Residence</td>
+                    <td>₹1.8Cr</td>
+                    <td>12 min ago</td>
+                    <td><span class="status gold">Awaiting approval</span></td>
+                    <td><button class="action-btn" onclick="showToast('Opening Arjun Mehta profile')">Open</button></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Rohan Kapoor</strong></td>
+                    <td>Villa 07</td>
+                    <td>₹2.4Cr</td>
+                    <td>48 min ago</td>
+                    <td><span class="status red">Attention</span></td>
+                    <td><button class="action-btn" onclick="showToast('Opening Rohan Kapoor profile')">Open</button></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Meera Shah</strong></td>
+                    <td>Aster House</td>
+                    <td>₹94L</td>
+                    <td>2 hrs ago</td>
+                    <td><span class="status green">Healthy</span></td>
+                    <td><button class="action-btn" onclick="showToast('Opening Meera Shah profile')">Open</button></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Vikram Rao</strong></td>
+                    <td>Lakeview Residence</td>
+                    <td>₹1.2Cr</td>
+                    <td>4 hrs ago</td>
+                    <td><span class="status green">Healthy</span></td>
+                    <td><button class="action-btn" onclick="showToast('Opening Vikram Rao profile')">Open</button></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- ================= APPROVALS ================= -->
+
+<section class="page" id="approvals">
+
+    <div class="page-header">
+
+        <div>
+            <div class="eyebrow">Decision layer</div>
+            <h1>Approvals</h1>
+            <p class="subtitle">
+                Remove waiting. Keep projects moving.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="approval-grid">
+
+        <div class="approval">
+
+            <div class="approval-head">
+                <span class="status red">2 days overdue</span>
+                <span style="font-size:11px;color:#999;">#APR-1024</span>
+            </div>
+
+            <h3>Marble Selection</h3>
+
+            <p>
+                Palm Residence · Master Bathroom
+            </p>
+
+            <div class="approval-buttons">
+                <button class="approve"
+                        onclick="approve(this,'Marble selection approved')">
+                    Approve
+                </button>
+
+                <button class="reject"
+                        onclick="showToast('Revision requested.')">
+                    Request revision
+                </button>
+            </div>
+
+        </div>
+
+
+        <div class="approval">
+
+            <div class="approval-head">
+                <span class="status gold">Waiting</span>
+                <span style="font-size:11px;color:#999;">#APR-1025</span>
+            </div>
+
+            <h3>Living Room Lighting</h3>
+
+            <p>
+                Villa 07 · Interior Package
+            </p>
+
+            <div class="approval-buttons">
+                <button class="approve"
+                        onclick="approve(this,'Lighting approved')">
+                    Approve
+                </button>
+
+                <button class="reject"
+                        onclick="showToast('Revision requested.')">
+                    Request revision
+                </button>
+            </div>
+
+        </div>
+
+
+        <div class="approval">
+
+            <div class="approval-head">
+                <span class="status gold">Waiting</span>
+                <span style="font-size:11px;color:#999;">#APR-1026</span>
+            </div>
+
+            <h3>Furniture Package</h3>
+
+            <p>
+                Lakeview Residence · Living Area
+            </p>
+
+            <div class="approval-buttons">
+                <button class="approve"
+                        onclick="approve(this,'Furniture package approved')">
+                    Approve
+                </button>
+
+                <button class="reject"
+                        onclick="showToast('Revision requested.')">
+                    Request revision
+                </button>
+            </div>
+
+        </div>
+
+
+        <div class="approval">
+
+            <div class="approval-head">
+                <span class="status gold">Waiting</span>
+                <span style="font-size:11px;color:#999;">#APR-1027</span>
+            </div>
+
+            <h3>Facade Revision</h3>
+
+            <p>
+                Aster House · Exterior
+            </p>
+
+            <div class="approval-buttons">
+                <button class="approve"
+                        onclick="approve(this,'Facade revision approved')">
+                    Approve
+                </button>
+
+                <button class="reject"
+                        onclick="showToast('Revision requested.')">
+                    Request revision
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= TASKS ================= -->
+
+<section class="page" id="tasks">
+
+    <div class="page-header">
+
+        <div>
+            <div class="eyebrow">Execution</div>
+            <h1>Tasks</h1>
+            <p class="subtitle">
+                Give every person clarity on what happens next.
+            </p>
+        </div>
+
+        <button class="primary"
+                onclick="showToast('New task created.')">
+            + Add Task
+        </button>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-title">Today's priorities</div>
+            <span class="status gold">7 open</span>
+        </div>
+
+
+        <div class="task">
+
+            <button class="check"
+                    onclick="toggleTask(this)">
+            </button>
+
+            <div class="task-content">
+                <strong>Send revised marble palette</strong>
+                <span>Palm Residence · Ar. Kiran · Due today</span>
+            </div>
+
+            <span class="status red">High</span>
+
+        </div>
+
+
+        <div class="task">
+
+            <button class="check"
+                    onclick="toggleTask(this)">
+            </button>
+
+            <div class="task-content">
+                <strong>Confirm electrical drawings</strong>
+                <span>Villa 07 · Engineering · Due today</span>
+            </div>
+
+            <span class="status gold">Medium</span>
+
+        </div>
+
+
+        <div class="task">
+
+            <button class="check"
+                    onclick="toggleTask(this)">
+            </button>
+
+            <div class="task-content">
+                <strong>Prepare client presentation</strong>
+                <span>Aster House · Design Team · Tomorrow</span>
+            </div>
+
+            <span class="status green">Normal</span>
+
+        </div>
+
+
+        <div class="task">
+
+            <button class="check"
+                    onclick="toggleTask(this)">
+            </button>
+
+            <div class="task-content">
+                <strong>Update BOQ</strong>
+                <span>Lakeview Residence · QS Team · Tomorrow</span>
+            </div>
+
+            <span class="status gold">Medium</span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= DOCUMENTS ================= -->
+
+<section class="page" id="documents">
+
+    <div class="page-header">
+
+        <div>
+            <div class="eyebrow">Knowledge layer</div>
+            <h1>Documents</h1>
+            <p class="subtitle">
+                Everything your projects need, in one place.
+            </p>
+        </div>
+
+        <button class="primary"
+                onclick="showToast('Upload window opened.')">
+            ↑ Upload
+        </button>
+
+    </div>
+
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Document</th>
+                    <th>Project</th>
+                    <th>Type</th>
+                    <th>Updated</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td><strong>Floor Plan — Rev 04</strong></td>
+                    <td>Palm Residence</td>
+                    <td>Drawing</td>
+                    <td>Today</td>
+                    <td><button class="action-btn">Open</button></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Material Schedule</strong></td>
+                    <td>Villa 07</td>
+                    <td>Schedule</td>
+                    <td>Today</td>
+                    <td><button class="action-btn">Open</button></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Interior Presentation</strong></td>
+                    <td>Aster House</td>
+                    <td>Presentation</td>
+                    <td>Yesterday</td>
+                    <td><button class="action-btn">Open</button></td>
+                </tr>
+
+                <tr>
+                    <td><strong>BOQ — Package 03</strong></td>
+                    <td>Lakeview Residence</td>
+                    <td>Commercial</td>
+                    <td>2 days ago</td>
+                    <td><button class="action-btn">Open</button></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- ================= REPORTS ================= -->
+
+<section class="page" id="reports">
+
+    <div class="page-header">
+
+        <div>
+            <div class="eyebrow">Business intelligence</div>
+            <h1>Reports</h1>
+            <p class="subtitle">
+                See where the studio is heading.
+            </p>
+        </div>
+
+        <button class="secondary"
+                onclick="showToast('Report exported.')">
+            ↓ Export report
+        </button>
+
+    </div>
+
+
+    <div class="metrics">
+
+        <div class="metric">
+            <div class="metric-top">
+                <span>PIPELINE</span>
+            </div>
+            <strong>₹8.4Cr</strong>
+            <span class="metric-change">↑ 14%</span>
+        </div>
+
+        <div class="metric">
+            <div class="metric-top">
+                <span>REVENUE</span>
+            </div>
+            <strong>₹3.1Cr</strong>
+            <span class="metric-change">↑ 8%</span>
+        </div>
+
+        <div class="metric">
+            <div class="metric-top">
+                <span>PROJECT MARGIN</span>
+            </div>
+            <strong>31%</strong>
+            <span class="metric-change">↑ 3.2%</span>
+        </div>
+
+        <div class="metric">
+            <div class="metric-top">
+                <span>ON-TIME</span>
+            </div>
+            <strong>91%</strong>
+            <span class="metric-change">↑ 5%</span>
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-title">Studio performance</div>
+            <span style="font-size:10px;color:#999;">Last 6 months</span>
+        </div>
+
+        <div style="height:220px;display:flex;align-items:end;gap:12px;padding:20px 5px;">
+
+            <div style="height:45%;flex:1;background:#ddd2c0;border-radius:8px 8px 0 0;"></div>
+
+            <div style="height:58%;flex:1;background:#cdb99a;border-radius:8px 8px 0 0;"></div>
+
+            <div style="height:52%;flex:1;background:#b9a078;border-radius:8px 8px 0 0;"></div>
+
+            <div style="height:71%;flex:1;background:#a98b61;border-radius:8px 8px 0 0;"></div>
+
+            <div style="height:78%;flex:1;background:#96764d;border-radius:8px 8px 0 0;"></div>
+
+            <div style="height:92%;flex:1;background:#1d1d1a;border-radius:8px 8px 0 0;"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= AI ================= -->
+
+<section class="page" id="ai">
+
+    <div class="page-header">
+
+        <div>
+            <div class="eyebrow">Operational intelligence</div>
+            <h1>North AI</h1>
+            <p class="subtitle">
+                Ask your business what needs to happen next.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="ai-page">
+
+        <div class="ai-chat">
+
+            <div class="chat-header">
+
+                <div class="ai-avatar">✦</div>
+
+                <div>
+                    <strong>North AI</strong>
+                    <span>Ganggaan operational intelligence</span>
+                </div>
+
+            </div>
+
+
+            <div class="messages" id="messages">
+
+                <div class="message ai">
+                    Good morning. I've reviewed your active
+                    projects. Three items need attention today.
+                    <br><br>
+                    Ask me anything about projects, clients,
+                    approvals, deadlines or business performance.
+                </div>
+
+                <div class="message user">
+                    What needs my attention today?
+                </div>
+
+                <div class="message ai">
+                    <strong>Priority 1</strong> — Palm Residence
+                    has an approval waiting for 2 days.
+                    <br><br>
+                    <strong>Priority 2</strong> — Villa 07 is
+                    trending 8% above its material budget.
+                    <br><br>
+                    <strong>Priority 3</strong> — 4 tasks are
+                    approaching deadline.
+                </div>
+
+            </div>
+
+
+            <div class="chat-input">
+
+                <input
+                    id="aiInput"
+                    placeholder="Ask North AI..."
+                    onkeydown="if(event.key==='Enter')sendAI()"
+                >
+
+                <button class="chat-send" onclick="sendAI()">
+                    ↑
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <div class="card">
+
+                <div class="card-header">
+                    <div class="card-title">Quick intelligence</div>
+                </div>
+
+                <button class="secondary"
+                        style="width:100%;margin-bottom:8px;text-align:left;"
+                        onclick="askAI('Which project is at risk?')">
+                    Which project is at risk?
+                </button>
+
+                <button class="secondary"
+                        style="width:100%;margin-bottom:8px;text-align:left;"
+                        onclick="askAI('Which approvals are overdue?')">
+                    Which approvals are overdue?
+                </button>
+
+                <button class="secondary"
+                        style="width:100%;margin-bottom:8px;text-align:left;"
+                        onclick="askAI('Show me budget risks')">
+                    Show me budget risks
+                </button>
+
+                <button class="secondary"
+                        style="width:100%;text-align:left;"
+                        onclick="askAI('What should my team do today?')">
+                    What should my team do today?
+                </button>
+
+            </div>
+
+
+            <div class="card" style="margin-top:16px;">
+
+                <div class="eyebrow">Automations</div>
+
+                <h3 style="font-family:'Playfair Display',serif;font-size:20px;">
+                    Let the system handle the follow-up.
+                </h3>
+
+                <p style="font-size:10px;color:#999;line-height:1.6;margin-top:8px;">
+                    Automatically remind clients about pending
+                    approvals, notify teams about deadlines and
+                    surface project risks before they become problems.
+                </p>
+
+                <button
+                    class="primary"
+                    style="margin-top:15px;"
+                    onclick="showToast('Automation builder opened.')">
+                    Configure automation →
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= SETTINGS ================= -->
+
+<section class="page" id="settings">
+
+    <div class="page-header">
+
+        <div>
+            <div class="eyebrow">Workspace</div>
+            <h1>Settings</h1>
+            <p class="subtitle">
+                Configure your Ganggaan operating environment.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-title">Workspace settings</div>
+        </div>
+
+        <div style="display:grid;gap:15px;max-width:600px;">
+
+            <label style="font-size:11px;">
+                Studio name
+                <input value="Ganggaan Studio"
+                       style="display:block;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;margin-top:6px;">
+            </label>
+
+            <label style="font-size:11px;">
+                Currency
+                <select style="display:block;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;margin-top:6px;">
+                    <option>INR — Indian Rupee</option>
+                    <option>AED — UAE Dirham</option>
+                    <option>USD — US Dollar</option>
+                </select>
+            </label>
+
+            <button class="primary"
+                    onclick="showToast('Settings saved.')">
+                Save changes
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- ================= PROJECT MODAL ================= -->
+
+<div class="modal-overlay" id="projectModal">
+
+    <div class="modal">
+
+        <div class="modal-top">
+
+            <div>
+                <div class="eyebrow">Project intelligence</div>
+                <h2 id="modalProjectName">Palm Residence</h2>
+            </div>
+
+            <button class="close"
+                    onclick="closeModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <div class="detail-grid">
+
+                <div class="detail">
+                    <small>PROJECT VALUE</small>
+                    <strong>₹1.8Cr</strong>
+                </div>
+
+                <div class="detail">
+                    <small>PROGRESS</small>
+                    <strong>72%</strong>
+                </div>
+
+                <div class="detail">
+                    <small>STATUS</small>
+                    <strong>Active</strong>
+                </div>
+
+            </div>
+
+
+            <div class="card" style="background:#fafaf8;margin-bottom:18px;">
+
+                <div class="eyebrow">North AI observation</div>
+
+                <p style="font-size:12px;line-height:1.7;">
+                    Client approval is currently the primary
+                    dependency. If approval is received today,
+                    the next construction milestone remains
+                    on schedule.
+                </p>
+
+            </div>
+
+
+            <div class="eyebrow">Project timeline</div>
+
+            <div class="timeline">
+
+                <div class="timeline-item">
+                    <strong>Design development</strong>
+                    <p>Completed · 14 Aug</p>
+                </div>
+
+                <div class="timeline-item">
+                    <strong>Material selection</strong>
+                    <p>Completed · 28 Aug</p>
+                </div>
+
+                <div class="timeline-item">
+                    <strong>Client approval</strong>
+                    <p>Waiting · Current stage</p>
+                </div>
+
+                <div class="timeline-item">
+                    <strong>Execution</strong>
+                    <p>Starts after approval</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= COMMAND PALETTE ================= -->
+
+<div class="command" id="command">
+
+    <div class="command-box">
+
+        <input
+            class="command-input"
+            id="commandInput"
+            placeholder="Search Ganggaan OS..."
+            oninput="filterCommands()"
+        >
+
+        <div id="commandItems">
+
+            <div class="command-item"
+                 onclick="navigate('dashboard');closeCommand()">
+                ⌂ &nbsp; Go to Overview
+            </div>
+
+            <div class="command-item"
+                 onclick="navigate('projects');closeCommand()">
+                ▣ &nbsp; Go to Projects
+            </div>
+
+            <div class="command-item"
+                 onclick="navigate('clients');closeCommand()">
+                ♙ &nbsp; Go to Clients
+            </div>
+
+            <div class="command-item"
+                 onclick="navigate('approvals');closeCommand()">
+                ✓ &nbsp; Go to Approvals
+            </div>
+
+            <div class="command-item"
+                 onclick="navigate('tasks');closeCommand()">
+                ☷ &nbsp; Go to Tasks
+            </div>
+
+            <div class="command-item"
+                 onclick="navigate('ai');closeCommand()">
+                ✦ &nbsp; Open North AI
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* ================= NAVIGATION ================= */
+
+const pageNames = {
+    dashboard:"Overview",
+    projects:"Projects",
+    clients:"Clients",
+    approvals:"Approvals",
+    tasks:"Tasks",
+    documents:"Documents",
+    reports:"Reports",
+    ai:"North AI",
+    settings:"Settings"
+};
+
+function navigate(page){
+
+    document.querySelectorAll(".page").forEach(section=>{
+        section.classList.remove("active");
+    });
+
+    const target = document.getElementById(page);
+
+    if(target){
+        target.classList.add("active");
+    }
+
+    document.querySelectorAll(".nav button").forEach(button=>{
+        button.classList.remove("active");
+
+        if(button.dataset.page === page){
+            button.classList.add("active");
+        }
+    });
+
+    document.getElementById("breadcrumb").textContent =
+        pageNames[page] || page;
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* ================= SIDEBAR ================= */
+
+document.querySelectorAll(".nav button").forEach(button=>{
+
+    button.addEventListener("click",()=>{
+
+        const page = button.dataset.page;
+
+        navigate(page);
+
+    });
+
+});
+
+
+/* ================= PROJECT MODAL ================= */
+
+function openProject(name){
+
+    document.getElementById("modalProjectName").textContent = name;
+
+    document.getElementById("projectModal")
+        .classList.add("show");
+
+}
+
+function closeModal(){
+
+    document.getElementById("projectModal")
+        .classList.remove("show");
+
+}
+
+document.getElementById("projectModal")
+    .addEventListener("click",function(e){
+
+        if(e.target === this){
+            closeModal();
+        }
+
+    });
+
+
+/* ================= APPROVAL ================= */
+
+function approve(button,message){
+
+    const approval = button.closest(".approval");
+
+    approval.style.opacity=".45";
+
+    button.disabled=true;
+
+    showToast(message);
+
+}
+
+
+/* ================= TASKS ================= */
+
+function toggleTask(button){
+
+    const task = button.closest(".task");
+
+    const completed = task.classList.toggle("completed");
+
+    if(completed){
+
+        button.classList.add("done");
+        button.innerHTML="✓";
+
+        showToast("Task completed.");
+
+    }else{
+
+        button.classList.remove("done");
+        button.innerHTML="";
+
+    }
+
+}
+
+
+/* ================= TOAST ================= */
+
+let toastTimer;
+
+function showToast(message){
+
+    const toast=document.getElementById("toast");
+
+    toast.textContent=message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer=setTimeout(()=>{
+        toast.classList.remove("show");
+    },2600);
+
+}
+
+
+/* ================= NORTH AI ================= */
+
+function askAI(question){
+
+    document.getElementById("aiInput").value=question;
+
+    navigate("ai");
+
+    setTimeout(sendAI,300);
+
+}
+
+function sendAI(){
+
+    const input=document.getElementById("aiInput");
+
+    const question=input.value.trim();
+
+    if(!question) return;
+
+    const messages=document.getElementById("messages");
+
+    const user=document.createElement("div");
+
+    user.className="message user";
+
+    user.textContent=question;
+
+    messages.appendChild(user);
+
+    input.value="";
+
+    setTimeout(()=>{
+
+        const ai=document.createElement("div");
+
+        ai.className="message ai";
+
+        let answer =
+        "I've reviewed the current Ganggaan workspace. ";
+
+        const q=question.toLowerCase();
+
+        if(q.includes("risk")){
+
+            answer +=
+            "<strong>Villa 07</strong> currently has the highest operational risk because material spend is trending above budget.";
+
+        }else if(q.includes("approval")){
+
+            answer +=
+            "There are <strong>4 pending approvals</strong>. Two have passed their expected response window.";
+
+        }else if(q.includes("budget")){
+
+            answer +=
+            "The main budget signal is <strong>Villa 07</strong>, currently trending approximately 8% above its material allocation.";
+
+        }else if(q.includes("team") || q.includes("today")){
+
+            answer +=
+            "Today's priorities are the Palm Residence approval, Villa 07 electrical drawings and the Aster House presentation.";
+
+        }else{
+
+            answer +=
+            "Based on the current workspace, I recommend reviewing pending approvals and project budget alerts first.";
+
+        }
+
+        ai.innerHTML=answer;
+
+        messages.appendChild(ai);
+
+        messages.scrollTop=messages.scrollHeight;
+
+    },700);
+
+}
+
+
+/* ================= COMMAND PALETTE ================= */
+
+function openCommand(){
+
+    document.getElementById("command")
+        .classList.add("show");
+
+    setTimeout(()=>{
+        document.getElementById("commandInput").focus();
+    },100);
+
+}
+
+function closeCommand(){
+
+    document.getElementById("command")
+        .classList.remove("show");
+
+}
+
+document.getElementById("command")
+    .addEventListener("click",function(e){
+
+        if(e.target===this){
+            closeCommand();
+        }
+
+    });
+
+document.addEventListener("keydown",function(e){
+
+    if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==="k"){
+
+        e.preventDefault();
+
+        openCommand();
+
+    }
+
+    if(e.key==="Escape"){
+
+        closeCommand();
+        closeModal();
+
+    }
+
+});
+
+
+/* ================= COMMAND SEARCH ================= */
+
+function filterCommands(){
+
+    const value=document
+        .getElementById("commandInput")
+        .value
+        .toLowerCase();
+
+    document.querySelectorAll(".command-item")
+        .forEach(item=>{
+
+            item.style.display =
+                item.textContent
+                    .toLowerCase()
+                    .includes(value)
+                    ? "block"
+                    : "none";
+
+        });
+
+}
+
+
+/* ================= GLOBAL SEARCH ================= */
+
+document.getElementById("globalSearch")
+    .addEventListener("keydown",function(e){
+
+        if(e.key!=="Enter") return;
+
+        const query=this.value.toLowerCase();
+
+        if(query.includes("palm")){
+
+            navigate("projects");
+            openProject("Palm Residence");
+
+        }else if(query.includes("villa")){
+
+            navigate("projects");
+            openProject("Villa 07");
+
+        }else if(query.includes("aster")){
+
+            navigate("projects");
+            openProject("Aster House");
+
+        }else if(query.includes("approval")){
+
+            navigate("approvals");
+
+        }else if(query.includes("client")){
+
+            navigate("clients");
+
+        }else{
+
+            showToast("No matching workspace item found.");
+
+        }
+
+    });
+
+
+</script>
+
+</body>
+</html>
